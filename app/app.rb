@@ -106,7 +106,7 @@ class Broliday < Padrino::Application
         
         # also need to send order to bartender
 
-        Mechanize.new.post(uri, params).body
+        puts Mechanize.new.post(MOGREET_URI, params).body
         StreamItem.create(:message => "Someone just sent #{u.name} a #{order}!  Let's get weird!")
         
         200
