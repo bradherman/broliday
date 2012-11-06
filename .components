@@ -1,0 +1,8 @@
+--- 
+:admin_renderer: haml
+:stylesheet: none
+:test: none
+:renderer: haml
+:orm: datamapper
+:script: none
+:mock: none
