@@ -2,6 +2,11 @@
 PADRINO_ENV  = ENV['PADRINO_ENV'] ||= ENV['RACK_ENV'] ||= 'development'  unless defined?(PADRINO_ENV)
 PADRINO_ROOT = File.expand_path('../..', __FILE__) unless defined?(PADRINO_ROOT)
 
+MOGREET_URI = "https://api.mogreet.com/moms/transaction.send"
+MOGREET_CLIENT_ID = "1320"
+MOGREET_TOKEN = "61d5ae55854a90d390cf8adcd49d8a0a"
+MOGREET_SMS_CAMPAIGN = "28453"
+
 # Load our dependencies
 require 'rubygems' unless defined?(Gem)
 require 'bundler/setup'

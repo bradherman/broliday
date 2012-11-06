@@ -90,22 +90,31 @@ class Broliday < Padrino::Application
 
   post '/gift-a-shot' do
     if current_user.buy_shot
-      order = params[:order]
-      u = User.get(params[:user_id].to_i)
+      begin
+        order = params[:order]
+        u = User.get(params[:user_id].to_i)
 
-      uri = "https://api.mogreet.com/moms/transaction.send"
-      client_id = "1320"
-      token = "61d5ae55854a90d390cf8adcd49d8a0a"
-      campaign_id = "28453"
-      to = u.cell
-      message = "Happy brolidays! Someone just sent you an anonymous shot. Hit the bar to retrieve it. Feel free to gift some tonight.  You have #{current_user.points.to_i} left :)"
-      params = {:client_id => client_id, :token => token, :campaign_id => campaign_id, :to => to, :message => message}
-      
-      puts params.inspect
+        message = "Happy brolidays! Some asshole just sent you an anonymous shot. Hit the bar to retrieve it. Feel free to gift some tonight. You have #{current_user.points.to_i} left :)"
+        
+        params = {
+          :client_id => MOGREET_CLIENT_ID, 
+          :token => MOGREET_TOKEN, 
+          :campaign_id => MOGREET_SMS_CAMPAIGN, 
+          :to => u.cell, 
+          :message => message
+        }
+        
+        # also need to send order to bartender
 
-      puts Mechanize.new.post(uri, params).body
-
-      200
+        Mechanize.new.post(uri, params).body
+        StreamItem.create(:message => "Someone just sent #{u.name} a #{order}!  Let's get weird!")
+        
+        200
+      rescue
+        500
+      end
+    else
+      400
     end
   end
 
@@ -113,6 +122,8 @@ class Broliday < Padrino::Application
   end
 
   get '/party-stream' do
+    @stream_items = StreamItem.all(:order => :created_at.desc)
+    erb :party_stream
   end
 
   post '/party-stream' do

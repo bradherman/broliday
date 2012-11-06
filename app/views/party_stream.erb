@@ -1,0 +1,9 @@
+<div class="grid">
+	<div class="row-fluid show-grid">
+		<% @stream_items.each do |s| %>
+			<div class="span16">
+				<%= s.message %>
+			</div>
+		<% end %>
+	</div>
+</div>
