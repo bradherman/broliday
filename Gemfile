@@ -8,10 +8,17 @@ source :rubygems
 gem 'rake'
 gem 'sinatra-flash', :require => 'sinatra/flash'
 
+group :development do
+  gem 'dm-sqlite-adapter'
+end
+
+group :production do
+  gem "dm-postgres-adapter"
+end
+
 # Component requirements
 gem 'bcrypt-ruby', :require => "bcrypt"
 gem 'haml'
-gem 'dm-sqlite-adapter'
 gem 'dm-validations'
 gem 'dm-timestamps'
 gem 'dm-migrations'
