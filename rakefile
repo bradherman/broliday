@@ -1,0 +1,11 @@
+require 'rake'
+
+namespace :setup do
+	task :begin do
+		DataMapper.auto_upgrade!
+	end
+
+	task :seed do
+		Code.create(:value => (111111..555555).to_a.sample)
+	end
+end
