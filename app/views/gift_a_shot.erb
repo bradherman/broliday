@@ -1,0 +1,47 @@
+<p>Tis the season for giving, so use your points to text someone an anonymous shot!</p>
+<p>Your remaining points: <%= current_user.points %></p>
+
+<section id="users">
+	<% User.all.each do |user| %>
+		<% unless user == current_user %>
+			<div class="row-fluid show-grid">
+				<div class="span4 user" rel="<%=user.id%>"><a href="#"><%= user.name %></a></div>
+			</div>
+		<% end %>
+	<% end %>
+</section>
+
+<section id="pick-drink" style="display:none">
+	<p>You're sending a shot to: <span class="name"></span></p>
+	<p>What shot do you want to send them?</p>
+	<form method="post">
+		<textarea name="order"></textarea>
+		<input type="hidden" id="user_id" name="user_id" value="">
+		<input type="submit" id="send-order" class="btn" value="Send">
+	</form>	
+</section>
+
+<script type="text/javascript">
+	$(".user").live("click", function(){
+		$("#users").hide(250);
+		$("#pick-drink").show(250);
+
+		$("#user_id").val($(this).attr('rel'));
+	});
+
+	$("form").submit(function(){
+		var form = $(this);
+	    $.ajax({ 
+	         url   : form.attr('action'),
+	         type  : form.attr('method'),
+	         data  : form.serialize(), // data to be submitted
+	         success: function(response){
+	            
+	         },
+	         error: function(response){
+
+	         }
+	    });
+	    return false;
+	});
+</script>
