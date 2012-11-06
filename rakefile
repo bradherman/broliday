@@ -1,11 +1,17 @@
 require 'rake'
 
+require ::File.dirname(__FILE__) + '/config/boot'
+require ::File.dirname(__FILE__) + '/config/apps'
+require ::File.dirname(__FILE__) + '/config/database'
+
 namespace :setup do
 	task :begin do
 		DataMapper.auto_upgrade!
 	end
 
 	task :seed do
-		Code.create(:value => (111111..555555).to_a.sample)
+		100.times do |x| 
+			Code.create(:value => (111111..555555).to_a.sample)
+		end
 	end
 end
