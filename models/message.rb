@@ -9,4 +9,6 @@ class Message
 	property :message, 		Text
 	property :image_url,	String
 	property :subject,		Text
+
+	timestamps :created_at
 end
