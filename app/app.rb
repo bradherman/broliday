@@ -137,7 +137,7 @@ class Broliday < Padrino::Application
       :campaign_id => doc.find("campaign_id").first.content,
       :number => doc.find("msisdn").first.content,
       :carrier => doc.find("carrier").first.content,
-      :message => (doc.find("message").first.content.gsub(/broliday\s/i, '') rescue nil),
+      :message => (doc.find("message").first.content.gsub(/(broliday\s?)|(br\s?)/i, '') rescue nil),
       :subject => (doc.find("subject").first.content rescue nil),
       :username => user.name
     )
@@ -160,7 +160,7 @@ class Broliday < Padrino::Application
   def create_user(doc)
     u=User.create(
       :cell => doc.find("msisdn").first.content,
-      :name => (doc.find("message").first.content.gsub(/broliday\s/i, '') rescue "").titleize
+      :name => (doc.find("message").first.content.gsub(/(broliday\s?)|(br\s?)/i, '') rescue "").titleize
     )
 
     params = {
