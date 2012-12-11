@@ -144,6 +144,11 @@ class Broliday < Padrino::Application
     erb :party_stream
   end
 
+  get '/items' do
+    @messages = Message.all(:order => :created_at.desc)
+    render :json => @messages
+  end
+
   post '/party-stream' do
   end
 end

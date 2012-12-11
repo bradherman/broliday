@@ -1,3 +1,5 @@
+require 'dm-serializer'
+
 class Message
 	include DataMapper::Resource
 	include DataMapper::Validate

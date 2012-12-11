@@ -4,7 +4,6 @@ class User
 
 	property :id,		Serial
 	property :name,		String	,	:required => true
-	property :code,		String	,	:required => true	,	:unique => true
 	property :cell,		String	,	:required => true	,	:unique => true
 
 	property :points,	Integer	,	:default => 5

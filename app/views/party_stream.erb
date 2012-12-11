@@ -1,5 +1,5 @@
 <div class="grid">
-	<div class="row-fluid show-grid">
+	<div class="row-fluid show-grid" id="stream">
 		<% @messages.each do |message| %>
 			<div class="span16">
 				<% if message.image_url %>
@@ -11,3 +11,30 @@
 		<% end %>
 	</div>
 </div>
+
+<script type="text/javascript">
+	var diff, i, BR, length;
+	BR = {};
+	BR["count"] = <%= Message.count %>;
+	setInterval(
+		function () {
+			$.getJSON("/items", function(data){
+				length = data['json'].length;
+				if (length > BR["count"]) {
+					for (i = 0; i < length - BR["count"]; i++){
+						if (data['json'][i]['image_url']) {
+							$("#stream").prepend($("<div class='span16' id='new'><img src='"+data['json'][i]['image_url']+"'/></div>"));
+						} else if (data['json'][i]['message']){
+							$("#stream").prepend($("<div class='span16 new' id='new'>"+data['json'][i]['message']+"</div>"));
+						}
+
+						$(".new").show(1000, function(){$("#new").removeAttr('id') });
+					}
+					BR["count"] = data['json'].length;
+				}
+			});
+		}, 4000);
+</script>
+<style type="text/css">
+	#new {display:none;}
+</style>
