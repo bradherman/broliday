@@ -134,7 +134,11 @@ class Broliday < Padrino::Application
   # </mogreet>
 
   post '/message' do
-    puts "\n\n#{params.inspect}\n\n"
+    Message.create(:body => params.inspect)
+  end
+
+  get '/message' do
+    Message.create(:body => params.inspect)
   end
 
   get '/party-stream' do
