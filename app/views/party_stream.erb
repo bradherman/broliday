@@ -3,7 +3,7 @@
 		<div class="row-fluid show-grid">
 			<div class="span16">
 				<% if message.image_url %>
-					<img src="<%= message.image_url %>" height="400"/>
+					<img src="<%= message.image_url %>"/>
 				<% else %>
 					<%= message.message %>
 				<% end %>
@@ -23,7 +23,7 @@
 				if (length > BR["count"]) {
 					for (i = 0; i < length - BR["count"]; i++){
 						if (data['json'][i]['image_url']) {
-							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><img height='400' src='"+data['json'][i]['image_url']+"'/></div></div>"));
+							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><img src='"+data['json'][i]['image_url']+"'/></div></div>"));
 						} else if (data['json'][i]['message']){
 							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'>"+data['json'][i]['message']+"</div></div>"));
 						}
