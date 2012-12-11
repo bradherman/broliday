@@ -1,6 +1,6 @@
-<div class="grid">
-	<div class="row-fluid show-grid" id="stream">
-		<% @messages.each do |message| %>
+<div class="grid" id="stream">
+	<% @messages.each do |message| %>
+		<div class="row-fluid show-grid">
 			<div class="span16">
 				<% if message.image_url %>
 					<img src="<%= message.image_url %>"/>
@@ -8,8 +8,8 @@
 					<%= message.message %>
 				<% end %>
 			</div>
-		<% end %>
-	</div>
+		</div>
+	<% end %>
 </div>
 
 <script type="text/javascript">
@@ -23,9 +23,9 @@
 				if (length > BR["count"]) {
 					for (i = 0; i < length - BR["count"]; i++){
 						if (data['json'][i]['image_url']) {
-							$("#stream").prepend($("<div class='span16' id='new'><img src='"+data['json'][i]['image_url']+"'/></div>"));
+							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><img src='"+data['json'][i]['image_url']+"'/></div></div>"));
 						} else if (data['json'][i]['message']){
-							$("#stream").prepend($("<div class='span16 new' id='new'>"+data['json'][i]['message']+"</div>"));
+							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'>"+data['json'][i]['message']+"</div></div>"));
 						}
 
 						$(".new").show(2500, function(){$("#new").removeAttr('id') });
