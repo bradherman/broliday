@@ -3,9 +3,10 @@
 		<div class="row-fluid show-grid">
 			<div class="span16">
 				<% if message.image_url %>
+					<strong><%= message.username %>:</strong><br>
 					<img src="<%= message.image_url %>" width='400'/>
 				<% else %>
-					<%= message.message %>
+					<strong><%= message.username %>:</strong> <%= message.message %>
 				<% end %>
 			</div>
 		</div>
@@ -23,9 +24,9 @@
 				if (length > BR["count"]) {
 					for (i = 0; i < length - BR["count"]; i++){
 						if (data['json'][i]['image_url']) {
-							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><img width='400' src='"+data['json'][i]['image_url']+"'/></div></div>"));
+							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><strong>"+data['json'][i]['username']+"</strong><br><img width='400' src='"+data['json'][i]['image_url']+"'/></div></div>"));
 						} else if (data['json'][i]['message']){
-							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'>"+data['json'][i]['message']+"</div></div>"));
+							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><strong>"+data['json'][i]['username']+"</strong>: "+data['json'][i]['message']+"</div></div>"));
 						}
 
 						$("#new").show(1500, function(){$("#new").removeAttr('id') });

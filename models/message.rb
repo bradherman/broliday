@@ -11,6 +11,7 @@ class Message
 	property :message, 		Text
 	property :image_url,	String
 	property :subject,		Text
+	property :username,		Text
 
 	property :created_at,	DateTime
 end
