@@ -156,7 +156,7 @@ class Broliday < Padrino::Application
     render :json => @messages
   end
 
-  def create_user
+  def create_user(doc)
     u=User.create(
       :cell => doc.find("msisdn").first.content,
       :name => doc.find("message").first.content
