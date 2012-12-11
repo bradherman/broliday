@@ -10,5 +10,5 @@ class Message
 	property :image_url,	String
 	property :subject,		Text
 
-	property :created_at,	DateTime, :default => lambda{Time.now}
+	property :created_at,	DateTime
 end
