@@ -137,7 +137,7 @@ class Broliday < Padrino::Application
       :campaign_id => doc.find("campaign_id").first.content,
       :number => doc.find("msisdn").first.content,
       :carrier => doc.find("carrier").first.content,
-      :message => doc.find("message").first.content,
+      :message => (doc.find("message").first.content.gsub(/broliday\s/i, '') rescue nil),
       :subject => (doc.find("subject").first.content rescue nil)
     )
 
