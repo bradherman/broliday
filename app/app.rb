@@ -1,3 +1,5 @@
+require 'xml'
+
 class Broliday < Padrino::Application
   register Padrino::Rendering
   register Padrino::Mailer
@@ -121,28 +123,24 @@ class Broliday < Padrino::Application
   # get '/leaderboard' do
   # end
 
-  # <?xml version="1.0"?>
-  # <mogreet>  
-  #     <campaign_id>xxxxx</campaign_id>  
-  #     <msisdn>15555555555</msisdn>  
-  #     <carrier><![CDATA[Verizon Wireless]]></carrier> 
-  #     <message><![CDATA[user's message blah blah blah]]></message>  
-  #     <subject><![CDATA[]]></subject> 
-  #      <images>        
-  #         <image><![CDATA[http://d2c.bandcon.mogreet.com/mo-mms/images/some_image.jpeg]]></image>  
-  #     </images>
-  # </mogreet>
-
   post '/message' do
-    Message.create(:body => request.body.read)
-  end
+    doc = XML::Parser.string(request.body.read).parse
+    
+    m = Message.create(
+      :campaign_id => doc.find("campaign_id").first.content,
+      :number => doc.find("msisdn").first.content,
+      :carrier => doc.find("carrier").first.content,
+      :message => doc.find("message").first.content,
+      :subject => doc.find("subject").first.content
+    )
 
-  get '/message' do
-    Message.create(:body => request.body.read)
+    m.image_url = doc.find("//image").first.content rescue nil
+
+    m.save
   end
 
   get '/party-stream' do
-    @stream_items = StreamItem.all(:order => :created_at.desc)
+    @messages = Message.all(:order => :created_at.desc)
     erb :party_stream
   end
 

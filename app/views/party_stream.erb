@@ -1,8 +1,12 @@
 <div class="grid">
 	<div class="row-fluid show-grid">
-		<% @stream_items.each do |s| %>
+		<% @messages.each do |message| %>
 			<div class="span16">
-				<%= s.message %>
+				<% if message.image_url %>
+					<img src="<%= message.image_url %>"/>
+				<% else %>
+					<%= message.message %>
+				<% end %>
 			</div>
 		<% end %>
 	</div>

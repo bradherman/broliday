@@ -25,6 +25,7 @@ gem 'dm-migrations'
 gem 'dm-constraints'
 gem 'dm-aggregates'
 gem 'dm-core'
+gem 'libxml-ruby'
 gem 'mechanize'
 gem 'rake'
 
