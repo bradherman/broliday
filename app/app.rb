@@ -62,63 +62,79 @@ class Broliday < Padrino::Application
   #   end
   #
 
-  before do
-    redirect '/login' unless current_user or request.path == '/login'
-  end
+  # before do
+  #   redirect '/login' unless current_user or request.path == '/login'
+  # end
 
   get '/' do
     erb :index
   end
 
-  get '/login' do
-    erb :login
-  end
+  # get '/login' do
+  #   erb :login
+  # end
 
-  post '/login' do
-    u = User.new(params[:user])
-    if u.save
-      session[:user] = u.cell
-      redirect '/'
-    else
-      redirect '/login'
-    end
-  end
+  # post '/login' do
+  #   u = User.new(params[:user])
+  #   if u.save
+  #     session[:user] = u.cell
+  #     redirect '/'
+  #   else
+  #     redirect '/login'
+  #   end
+  # end
 
-  get '/gift-a-shot' do
-    erb :gift_a_shot
-  end
+  # get '/gift-a-shot' do
+  #   erb :gift_a_shot
+  # end
 
-  post '/gift-a-shot' do
-    if current_user.buy_shot
-      begin
-        order = params[:order]
-        u = User.get(params[:user_id].to_i)
+  # post '/gift-a-shot' do
+  #   if current_user.buy_shot
+  #     begin
+  #       order = params[:order]
+  #       u = User.get(params[:user_id].to_i)
 
-        message = "Happy brolidays! Some asshole just sent you an anonymous shot. Hit the bar to retrieve it. Feel free to gift some tonight. You have #{current_user.points.to_i} left :)"
+  #       message = "Happy brolidays! Some asshole just sent you an anonymous shot. Hit the bar to retrieve it. Feel free to gift some tonight. You have #{current_user.points.to_i} left :)"
         
-        params = {
-          :client_id => MOGREET_CLIENT_ID, 
-          :token => MOGREET_TOKEN, 
-          :campaign_id => MOGREET_SMS_CAMPAIGN, 
-          :to => u.cell, 
-          :message => message
-        }
+  #       params = {
+  #         :client_id => MOGREET_CLIENT_ID, 
+  #         :token => MOGREET_TOKEN, 
+  #         :campaign_id => MOGREET_SMS_CAMPAIGN, 
+  #         :to => u.cell, 
+  #         :message => message
+  #       }
         
-        # also need to send order to bartender
+  #       # also need to send order to bartender
 
-        puts Mechanize.new.post(MOGREET_URI, params).body
-        StreamItem.create(:message => "Someone just sent #{u.name} a #{order}!  Let's get weird!")
+  #       puts Mechanize.new.post(MOGREET_URI, params).body
+  #       StreamItem.create(:message => "Someone just sent #{u.name} a #{order}!  Let's get weird!")
         
-        200
-      rescue
-        500
-      end
-    else
-      400
-    end
-  end
+  #       200
+  #     rescue
+  #       500
+  #     end
+  #   else
+  #     400
+  #   end
+  # end
 
-  get '/leaderboard' do
+  # get '/leaderboard' do
+  # end
+
+  # <?xml version="1.0"?>
+  # <mogreet>  
+  #     <campaign_id>xxxxx</campaign_id>  
+  #     <msisdn>15555555555</msisdn>  
+  #     <carrier><![CDATA[Verizon Wireless]]></carrier> 
+  #     <message><![CDATA[user's message blah blah blah]]></message>  
+  #     <subject><![CDATA[]]></subject> 
+  #      <images>        
+  #         <image><![CDATA[http://d2c.bandcon.mogreet.com/mo-mms/images/some_image.jpeg]]></image>  
+  #     </images>
+  # </mogreet>
+
+  post '/message' do
+    puts "\n\n#{params.inspect}\n\n"
   end
 
   get '/party-stream' do
