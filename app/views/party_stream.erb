@@ -28,7 +28,7 @@
 							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'>"+data['json'][i]['message']+"</div></div>"));
 						}
 
-						$(".new").show(2500, function(){$("#new").removeAttr('id') });
+						$("#new").show(1500, function(){$("#new").removeAttr('id') });
 					}
 					BR["count"] = data['json'].length;
 				}
