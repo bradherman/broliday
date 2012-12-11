@@ -8,12 +8,6 @@ class User
 
 	property :points,	Integer	,	:default => 5
 
-	validates_with_method	:check_code, :message => "Invalid code"
-
-	def check_code
-		Code.include?(self.code) ? true : false
-	end
-
 	def buy_shot
 		if self.points > 0
 			self.points -= 1
