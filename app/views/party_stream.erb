@@ -5,8 +5,11 @@
 				<% if message.image_url %>
 					<strong><%= message.username %>:</strong><br>
 					<img src="<%= message.image_url %>" width='400'/>
+					<% if message.message and message.message != "" %>
+						<p><%= message.message %></p>
+					<% end %>
 				<% else %>
-					<strong><%= message.username %>:</strong> <%= message.message %>
+					<p><strong><%= message.username %>:</strong> <%= message.message %></p>
 				<% end %>
 			</div>
 		</div>
@@ -25,6 +28,9 @@
 					for (i = 0; i < length - BR["count"]; i++){
 						if (data['json'][i]['image_url']) {
 							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><strong>"+data['json'][i]['username']+"</strong><br><img width='400' src='"+data['json'][i]['image_url']+"'/></div></div>"));
+							if (data['json'][i]['message'] && data['json'][i]['message'] != ""){
+								$("#new .span16").append("<p>"+data['json'][i]['message']+"</p>");
+							}
 						} else if (data['json'][i]['message']){
 							$("#stream").prepend($("<div class='row-fluid show-grid' id='new'><div class='span16'><strong>"+data['json'][i]['username']+"</strong>: "+data['json'][i]['message']+"</div></div>"));
 						}
