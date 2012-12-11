@@ -126,6 +126,8 @@ class Broliday < Padrino::Application
   post '/message' do
     doc = XML::Parser.string(request.body.read).parse
     
+    (create_user(doc) and return) unless User.find(:number => doc.find("msisdn").first.content)
+
     m = Message.create(
       :campaign_id => doc.find("campaign_id").first.content,
       :number => doc.find("msisdn").first.content,
@@ -149,6 +151,22 @@ class Broliday < Padrino::Application
     render :json => @messages
   end
 
-  post '/party-stream' do
+  def create_user
+    u=User.create(
+      :cell => doc.find("msisdn").first.content,
+      :name => doc.find("message").first.content
+    )
+
+    params = {
+      :client_id => MOGREET_CLIENT_ID, 
+      :token => MOGREET_TOKEN, 
+      :campaign_id => MOGREET_SMS_CAMPAIGN, 
+      :to => u.cell, 
+      :message => "Thanks for signing up.  Be sure to include the keyword BROLIDAY in all of your messages to 343434!"
+    }
+
+    puts Mechanize.new.post(MOGREET_URI, params).body
+
+    return
   end
 end
