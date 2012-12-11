@@ -126,7 +126,7 @@ class Broliday < Padrino::Application
   post '/message' do
     doc = XML::Parser.string(request.body.read).parse
     
-    (create_user(doc) and return) unless User.get(:cell => doc.find("msisdn").first.content)
+    (create_user(doc) and return) unless (user = User.get(:cell => doc.find("msisdn").first.content))
 
     m = Message.create(
       :campaign_id => doc.find("campaign_id").first.content,
