@@ -131,7 +131,7 @@ class Broliday < Padrino::Application
       :number => doc.find("msisdn").first.content,
       :carrier => doc.find("carrier").first.content,
       :message => doc.find("message").first.content,
-      :subject => doc.find("subject").first.content rescue nil
+      :subject => (doc.find("subject").first.content rescue nil)
     )
 
     m.image_url = doc.find("//image").first.content rescue nil
