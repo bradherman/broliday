@@ -6,11 +6,11 @@ class Activity
 
 	def personalize(to)
 		m = message
-		target = User.first(:cell.not => to, :offset => rand(User.count-1)) if message.scan(/<target>/).present?
-		other = User.first(:cell.not => [to, (target rescue "")], :offset => rand(User.count-2)) if self.message.scan(/<other>/).present?
+		target = User.first(:cell.not => to, :offset => rand(User.count-1)) if message.scan(/\[\[target\]\]/).present?
+		other = User.first(:cell.not => [to, (target rescue "")], :offset => rand(User.count-2)) if self.message.scan(/\[\[other\]\]/).present?
 		
-		m.gsub!(/<target>/, target) if target
-		m.gsub!(/<other>/, other) if other
+		m.gsub!(/\[\[target\]\]/, target) if target
+		m.gsub!(/\[\[other\]\]/, other) if other
 		m
 	end
 
