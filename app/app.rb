@@ -125,26 +125,36 @@ class Broliday < Padrino::Application
     Rails.logger.debug "Sending a random text"
 
     offset = rand(User.count-1)
-    user = User.first(:offset => offset).where("number != #{number}")
+
+    number = "13173319719" if number = "13173319718"
+    user = User.first(:offset => offset).where("cell != #{number}")
 
     if user
+      message = random_message(user)
       params = {
         :client_id => MOGREET_CLIENT_ID, 
         :token => MOGREET_TOKEN, 
         :campaign_id => MOGREET_SMS_CAMPAIGN, 
         :to => user.cell, 
-        :message => random_message(user)
+        :message => message
       }
 
       Mechanize.new.post(MOGREET_URI, params).body
+
+      number = "13173319718" if number = "13173319719"
+
+      params = {
+        :client_id => MOGREET_CLIENT_ID, 
+        :token => MOGREET_TOKEN, 
+        :campaign_id => MOGREET_SMS_CAMPAIGN, 
+        :to => number, 
+        :message => "We just sent a random text to #{user.name}"
+      }
     end
   end
 
   def random_message(user)
     Rails.logger.debug "Sending random message"
-
-    offset = rand(User.count-1)
-    user = User.first(:offset => offset).where("number != #{user.number}")
-    MESSAGES.sample.gsub(/<recipient>/, user.name).gsub(/<target>/, user.name)
+    MESSAGES.sample.gsub(/<target>/, user.name)
   end
 end
