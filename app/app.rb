@@ -126,15 +126,15 @@ class Broliday < Padrino::Application
 
     offset = rand(User.count-1)
 
-    user = User.first(:cell.not => number, :offset => offset)
+    u = User.first(:cell.not => number.to_s, :offset => offset)
 
-    if user
-      message = random_message(user)
+    if u
+      message = random_message(u)
       params = {
         :client_id => MOGREET_CLIENT_ID, 
         :token => MOGREET_TOKEN, 
         :campaign_id => MOGREET_SMS_CAMPAIGN, 
-        :to => user.cell, 
+        :to => u.cell, 
         :message => message
       }
 
@@ -145,17 +145,17 @@ class Broliday < Padrino::Application
         :token => MOGREET_TOKEN, 
         :campaign_id => MOGREET_SMS_CAMPAIGN, 
         :to => number, 
-        :message => "We just sent a random text to #{user.name}"
+        :message => "We just sent a random text to #{u.name}"
       }
 
       Mechanize.new.post(MOGREET_URI, params).body
     end
   end
 
-  def random_message(user)
+  def random_message(u)
     logger.info "Sending random message"
     offset = rand(User.count-1)
-    target = User.first(:cell.not => user.cell, :offset => offset)
+    target = User.first(:cell.not => u.cell, :offset => offset)
     MESSAGES.sample.gsub(/<target>/, target.name)
   end
 end
