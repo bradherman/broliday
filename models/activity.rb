@@ -18,6 +18,7 @@ class Activity
 		code = Code.create
 		m = Activity.first(:offset => rand(Activity.count)).personalize(to)
 		code.message = m
+		code.name = (User.first(:cell => to).name rescue nil)
 		code.save
 		"Get a pic of ".concat(m).concat(Activity.instructions(code.id))
 	end

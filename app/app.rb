@@ -69,7 +69,7 @@ class Broliday < Padrino::Application
 
     m = Message.create(
       :message => (params[:message] || code.message),
-      :username => "Web Upload",
+      :username => (code.name || "Web upload"),
       :image_url => "http://eazyparts.s3.amazonaws.com/br/#{params[:file][:filename]}"
     )
 

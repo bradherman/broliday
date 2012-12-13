@@ -5,4 +5,5 @@ class Code
 	property :id,		Serial
 	property :used,		Boolean,	:default	=>	false
 	property :message,	Text
+	property :name,		Text
 end
