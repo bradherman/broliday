@@ -126,7 +126,6 @@ class Broliday < Padrino::Application
 
     offset = rand(User.count-1)
 
-    number = "13173319719" if number = "13173319718"
     user = User.first(:cell.not => number, :offset => offset)
 
     if user
@@ -141,8 +140,6 @@ class Broliday < Padrino::Application
 
       Mechanize.new.post(MOGREET_URI, params).body
 
-      number = "13173319718" if number = "13173319719"
-
       params = {
         :client_id => MOGREET_CLIENT_ID, 
         :token => MOGREET_TOKEN, 
@@ -150,13 +147,14 @@ class Broliday < Padrino::Application
         :to => number, 
         :message => "We just sent a random text to #{user.name}"
       }
+
+      Mechanize.new.post(MOGREET_URI, params).body
     end
   end
 
   def random_message(user)
     logger.info "Sending random message"
     offset = rand(User.count-1)
-    number = (user.cell == "13173319718" ? "13173319719" : user.cell)
     target = User.first(:cell.not => user.cell, :offset => offset)
     MESSAGES.sample.gsub(/<target>/, target.name)
   end
