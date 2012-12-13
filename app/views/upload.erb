@@ -16,7 +16,8 @@
 	  			</span>
 	  			<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 			</div>
-			<input type="text" name="message" placeholder="enter a caption..."><br>
+			<textarea name="message" rows="3" class="span16"><%=@code.message || 'enter a caption...'%></textarea>
+			
 			<input type="submit" class="btn">
 		</fieldset>
 	</form>
