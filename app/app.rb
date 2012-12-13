@@ -55,18 +55,26 @@ class Broliday < Padrino::Application
     render :json => @messages
   end
 
-  get '/upload' do
-    erb :upload
+  get '/upload/:code' do |code|
+    if @code = Code.get(code) and !@code.used
+      erb :upload
+    else
+      redirect '/stream'
+    end
   end
 
-  post '/upload' do
+  post '/upload/:code' do |code|
+    code = Code.get(code)
     upload("br/#{params[:file][:filename]}", params[:file][:tempfile], "eazyparts")
 
     m = Message.create(
-      :message => (params[:message] || nil),
+      :message => (params[:message] || code.message),
       :username => "Web Upload",
       :image_url => "http://eazyparts.s3.amazonaws.com/br/#{params[:file][:filename]}"
     )
+
+    code.used = true
+    code.save
 
     redirect '/party-stream'
   end
@@ -90,17 +98,18 @@ class Broliday < Padrino::Application
     send_message(params)
   end
 
-  def send_random(number)
+  def send_random(from)
     offset = rand(User.count-1)
-    u = User.first(:cell.not => number.to_s, :offset => offset)
+    to = User.first(:cell.not => from.to_s, :offset => offset)
 
-    if u
-      message = random_message(u)
+    if to
+      message = random_message(to)
+
       params = {
         :client_id => MOGREET_CLIENT_ID, 
         :token => MOGREET_TOKEN, 
         :campaign_id => MOGREET_SMS_CAMPAIGN, 
-        :to => u.cell, 
+        :to => to.cell, 
         :message => message
       }
 
@@ -110,19 +119,16 @@ class Broliday < Padrino::Application
         :client_id => MOGREET_CLIENT_ID, 
         :token => MOGREET_TOKEN, 
         :campaign_id => MOGREET_SMS_CAMPAIGN, 
-        :to => number, 
-        :message => "We just sent a random text to #{u.name}: #{u.cell}: #{message}"
+        :to => from, 
+        :message => "We just sent a random text to #{to.name}: #{to.cell}: #{message}"
       }
 
       send_message(params)
     end
   end
 
-  def random_message(u)
-    logger.info "Sending random message"
-    offset = rand(User.count-1)
-    target = User.first(:cell.not => u.cell, :offset => offset)
-    MESSAGES.sample.gsub(/<target>/, target.name).concat(INSTRUCTIONS)
+  def random_message(to)
+    Activity.random(to)
   end
 
   def send_message(params)
