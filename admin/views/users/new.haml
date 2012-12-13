@@ -10,5 +10,3 @@
     .inner
       -form_for :user, url(:users, :create), :class => :form do |f|
         =partial "users/form", :locals => { :f => f }
-
--content_for :sidebar, partial("base/sidebar")
