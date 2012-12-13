@@ -63,7 +63,7 @@ class Broliday < Padrino::Application
     campaign = doc.find("campaign_id").first.content
     number = doc.find("msisdn").first.content
     carrier = doc.find("carrier").first.content
-    message = (doc.find("message").first.content.gsub(/(broliday\s?)|(br\s?)/i, '').gsub("\n", "") rescue nil)
+    message = (doc.find("message").first.content.gsub(/(^broliday\s?)|(^br\s?)/i, '').gsub("\n", "") rescue nil)
     subject = (doc.find("subject").first.content rescue nil)
 
     user = User.first(:cell => number)
