@@ -22,7 +22,8 @@
             %td.first=message.id
             %td=message.number
             %td=message.message
-            %td=message.image_url
+            %td
+              %img{:src => "#{message.image_url}", :width => "100"}
             %td=message.username
             %td=message.created_at
             %td.last
