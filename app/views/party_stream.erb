@@ -3,7 +3,7 @@
 		<div class="row-fluid show-grid">
 			<div class="span16">
 				<% if message.image_url %>
-					<strong><%= message.username %>:</strong><br>
+					<strong><%= message.username %> posted:</strong><br>
 					<img src="<%= message.image_url %>" width='400'/>
 					<% if message.message and message.message != "" %>
 						<p><%= message.message %></p>
