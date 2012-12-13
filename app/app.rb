@@ -59,7 +59,7 @@ class Broliday < Padrino::Application
     if @code = Code.get(code) and !@code.used
       erb :upload
     else
-      redirect '/stream'
+      redirect '/party-stream'
     end
   end
 
