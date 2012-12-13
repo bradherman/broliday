@@ -9,6 +9,7 @@ class Broliday < Padrino::Application
   enable :sessions
 
   MESSAGES = ["Get a picture of <target> doing a shot."]
+  INSTRUCTIONS = " Go to http://broliday.herokuapp.com/upload to send to the stream."
 
   #### ROUTES ####
 
@@ -124,7 +125,7 @@ class Broliday < Padrino::Application
     logger.info "Sending random message"
     offset = rand(User.count-1)
     target = User.first(:cell.not => u.cell, :offset => offset)
-    MESSAGES.sample.gsub(/<target>/, target.name)
+    MESSAGES.sample.gsub(/<target>/, target.name).concat(INSTRUCTIONS)
   end
 
   def send_message(params)
