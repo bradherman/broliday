@@ -5,7 +5,12 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.2.8)
+    aws-s3 (0.6.3)
+      builder
+      mime-types
+      xml-simple
     bcrypt-ruby (3.0.1)
+    builder (3.1.4)
     data_objects (0.10.10)
       addressable (~> 2.1)
     dm-aggregates (1.2.0)
@@ -117,11 +122,13 @@ GEM
     url_mount (0.2.1)
       rack
     webrobots (0.0.13)
+    xml-simple (1.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-s3
   bcrypt-ruby
   dm-aggregates
   dm-constraints

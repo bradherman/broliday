@@ -17,8 +17,8 @@ group :production do
 end
 
 # Component requirements
+gem 'aws-s3'
 gem 'bcrypt-ruby', :require => "bcrypt"
-gem 'haml'
 gem 'dm-validations'
 gem 'dm-timestamps'
 gem 'dm-migrations'
@@ -26,6 +26,7 @@ gem 'dm-constraints'
 gem 'dm-aggregates'
 gem 'dm-core'
 gem 'dm-serializer'
+gem 'haml'
 gem 'json'
 gem 'libxml-ruby'
 gem 'mechanize'

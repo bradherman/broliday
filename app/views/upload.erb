@@ -1,0 +1,30 @@
+<div class="grid" id="upload">
+	<center>
+		<form class="form" method="post" enctype="multipart/form-data">
+		<fieldset>
+			<legend>Upload an image</legend>
+			<span class="help-block">(or text it to 343434 with the BR code first)</span>
+			<div class="fileupload fileupload-new" data-provides="fileupload">
+	  			<div class="fileupload-new thumbnail" style="width: 50px; height: 50px;">
+	  				<img src="http://www.placehold.it/50x50/EFEFEF/AAAAAA" />
+	  			</div>
+	  			<div class="fileupload-preview fileupload-exists thumbnail" style="width: 50px; height: 50px;"></div>
+	  			<span class="btn btn-file">
+	  				<span class="fileupload-new">Select image</span>
+	  				<span class="fileupload-exists">Change</span>
+	  				<input type="file" name="file" />
+	  			</span>
+	  			<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+			</div>
+			<input type="text" name="message" placeholder="enter a caption..."><br>
+			<input type="submit" class="btn">
+		</fieldset>
+	</form>
+	</center>
+</div>
+
+<script type="text/javascript">
+	$('.fileupload').fileupload({
+		uploadtype: 'image'
+	});
+</script>

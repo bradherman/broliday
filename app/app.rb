@@ -1,4 +1,5 @@
 require 'xml'
+require 'aws/s3'
 
 class Broliday < Padrino::Application
   register Padrino::Rendering
@@ -9,56 +10,14 @@ class Broliday < Padrino::Application
 
   MESSAGES = ["Get a picture of <target> doing a shot."]
 
-  ##
-  # You can manage errors like:
-  #
-  #   error 404 do
-  #     render 'errors/404'
-  #   end
-  #
-  #   error 505 do
-  #     render 'errors/505'
-  #   end
-  #
+  #### ROUTES ####
 
   get '/' do
     erb :index
   end
 
-  # post '/gift-a-shot' do
-  #   if current_user.buy_shot
-  #     begin
-  #       order = params[:order]
-  #       u = User.get(params[:user_id].to_i)
-
-  #       message = "Happy brolidays! Some asshole just sent you an anonymous shot. Hit the bar to retrieve it. Feel free to gift some tonight. You have #{current_user.points.to_i} left :)"
-        
-  #       params = {
-  #         :client_id => MOGREET_CLIENT_ID, 
-  #         :token => MOGREET_TOKEN, 
-  #         :campaign_id => MOGREET_SMS_CAMPAIGN, 
-  #         :to => u.cell, 
-  #         :message => message
-  #       }
-        
-  #       # also need to send order to bartender
-
-  #       logger.info Mechanize.new.post(MOGREET_URI, params).body
-  #       StreamItem.create(:message => "Someone just sent #{u.name} a #{order}!  Let's get weird!")
-        
-  #       200
-  #     rescue
-  #       500
-  #     end
-  #   else
-  #     400
-  #   end
-  # end
-
   post '/message' do
     doc = XML::Parser.string(request.body.read).parse
-
-    logger.info doc
 
     campaign = doc.find("campaign_id").first.content
     number = doc.find("msisdn").first.content
@@ -73,8 +32,6 @@ class Broliday < Padrino::Application
     if message.scan(/bradmin/i).present?
       send_random(number) and return
     end
-
-    logger.info "Creating message"
 
     m = Message.create(
       :campaign_id => campaign,
@@ -100,9 +57,25 @@ class Broliday < Padrino::Application
     render :json => @messages
   end
 
-  def create_user(doc)
-    logger.info "Creating new user"
+  get '/upload' do
+    erb :upload
+  end
 
+  post '/upload' do
+    upload("br/#{params[:file][:filename]}", params[:file][:tempfile], "eazyparts")
+
+    m = Message.create(
+      :message => (params[:message] || nil),
+      :username => "Web Upload",
+      :image_url => "http://eazyparts.s3.amazonaws.com/br/#{params[:file][:filename]}"
+    )
+
+    redirect '/party-stream'
+  end
+
+  #### METHODS ####
+
+  def create_user(doc)
     u=User.create(
       :cell => doc.find("msisdn").first.content,
       :name => (doc.find("message").first.content.gsub(/(broliday\s?)|(br\s?)/i, '') rescue "").titleize
@@ -116,16 +89,11 @@ class Broliday < Padrino::Application
       :message => "Thanks for partyin, bro. We'll send you alerts throughout the night with stuff to do. You can also text BR plus a pic or message to get it displayed on screen. #Sorryforparty"
     }
 
-    logger.info params
-
-    Mechanize.new.post(MOGREET_URI, params).body
+    send_message(params)
   end
 
   def send_random(number)
-    logger.info "Sending a random text"
-
     offset = rand(User.count-1)
-
     u = User.first(:cell.not => number.to_s, :offset => offset)
 
     if u
@@ -138,7 +106,7 @@ class Broliday < Padrino::Application
         :message => message
       }
 
-      Mechanize.new.post(MOGREET_URI, params).body
+      send_message(params)
 
       params = {
         :client_id => MOGREET_CLIENT_ID, 
@@ -148,7 +116,7 @@ class Broliday < Padrino::Application
         :message => "We just sent a random text to #{u.name}: #{u.cell}: #{message}"
       }
 
-      Mechanize.new.post(MOGREET_URI, params).body
+      send_message(params)
     end
   end
 
@@ -157,5 +125,19 @@ class Broliday < Padrino::Application
     offset = rand(User.count-1)
     target = User.first(:cell.not => u.cell, :offset => offset)
     MESSAGES.sample.gsub(/<target>/, target.name)
+  end
+
+  def send_message(params)
+    Mechanize.new.post(MOGREET_URI, params).body
+  end
+
+  def upload(name, tmpfile, bucket)
+    while blk = tmpfile.read(65536)
+      AWS::S3::Base.establish_connection!(
+      :access_key_id     => S3_ACCESS_KEY,
+      :secret_access_key => S3_SECRET)
+      AWS::S3::S3Object.store(name,open(tmpfile),bucket,:access => :public_read)
+    end
+    true
   end
 end
