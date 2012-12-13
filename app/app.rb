@@ -155,6 +155,7 @@ class Broliday < Padrino::Application
 
   def random_message(user)
     logger.info "Sending random message"
+    offset = rand(User.count-1)
     target = User.first(:cell.not => user.cell, :offset => offset)
     MESSAGES.sample.gsub(/<target>/, target.name)
   end
