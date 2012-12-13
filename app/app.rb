@@ -8,9 +8,6 @@ class Broliday < Padrino::Application
 
   enable :sessions
 
-  MESSAGES = ["Get a picture of <target> doing a shot."]
-  INSTRUCTIONS = " Go to http://broliday.herokuapp.com/upload to send to the stream."
-
   #### ROUTES ####
 
   get '/' do
