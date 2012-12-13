@@ -145,7 +145,7 @@ class Broliday < Padrino::Application
         :token => MOGREET_TOKEN, 
         :campaign_id => MOGREET_SMS_CAMPAIGN, 
         :to => number, 
-        :message => "We just sent a random text to #{u.name}"
+        :message => "We just sent a random text to #{u.name}: #{u.cell}: #{message}"
       }
 
       Mechanize.new.post(MOGREET_URI, params).body
