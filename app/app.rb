@@ -58,6 +58,8 @@ class Broliday < Padrino::Application
   post '/message' do
     doc = XML::Parser.string(request.body.read).parse
 
+    puts doc
+
     campaign = doc.find("campaign_id").first.content
     number = doc.find("msisdn").first.content
     carrier = doc.find("carrier").first.content
@@ -71,6 +73,8 @@ class Broliday < Padrino::Application
     if message.scan(/bradmin/).present?
       send_random(number) and return
     end
+
+    puts "Creating message"
 
     m = Message.create(
       :campaign_id => campaign,
@@ -97,6 +101,8 @@ class Broliday < Padrino::Application
   end
 
   def create_user(doc)
+    puts "Creating new user"
+
     u=User.create(
       :cell => doc.find("msisdn").first.content,
       :name => (doc.find("message").first.content.gsub(/(broliday\s?)|(br\s?)/i, '') rescue "").titleize
@@ -112,25 +118,31 @@ class Broliday < Padrino::Application
 
     puts params
 
-    #Mechanize.new.post(MOGREET_URI, params).body
-  end
-
-  def send_random(number)
-    offset = rand(User.count-1)
-    user = User.first(:offset => offset).where("number != #{number}")
-
-    params = {
-      :client_id => MOGREET_CLIENT_ID, 
-      :token => MOGREET_TOKEN, 
-      :campaign_id => MOGREET_SMS_CAMPAIGN, 
-      :to => user.cell, 
-      :message => random_message(user)
-    }
-
     Mechanize.new.post(MOGREET_URI, params).body
   end
 
+  def send_random(number)
+    puts "Sending a random text"
+
+    offset = rand(User.count-1)
+    user = User.first(:offset => offset).where("number != #{number}")
+
+    if user
+      params = {
+        :client_id => MOGREET_CLIENT_ID, 
+        :token => MOGREET_TOKEN, 
+        :campaign_id => MOGREET_SMS_CAMPAIGN, 
+        :to => user.cell, 
+        :message => random_message(user)
+      }
+
+      Mechanize.new.post(MOGREET_URI, params).body
+    end
+  end
+
   def random_message(user)
+    puts "Sending random message"
+
     offset = rand(User.count-1)
     user = User.first(:offset => offset).where("number != #{user.number}")
     MESSAGES.sample.gsub(/<recipient>/, user.name).gsub(/<target>/, user.name)
