@@ -1,0 +1,16 @@
+.group
+  =f.label :used
+  =f.error_message_on :used
+  =f.check_box :used, :class => :check_box
+  %span.description Ex: a simple text
+
+.group
+  =f.label :message
+  =f.error_message_on :message
+  ~f.text_area :message, :class => :text_area
+  %span.description Ex: a simple text
+
+
+.group.navform.wat-cf
+  =f.submit pat(:save), :class => :button
+  =f.submit pat(:cancel), :onclick => "window.location='#{url(:codes, :index)}';return false", :class => :button
