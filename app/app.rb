@@ -127,7 +127,7 @@ class Broliday < Padrino::Application
     offset = rand(User.count-1)
 
     number = "13173319719" if number = "13173319718"
-    user = User.first(:offset => offset).where("cell != #{number}")
+    user = User.first(:cell.not => number, :offset => offset)
 
     if user
       message = random_message(user)
@@ -155,6 +155,7 @@ class Broliday < Padrino::Application
 
   def random_message(user)
     logger.info "Sending random message"
-    MESSAGES.sample.gsub(/<target>/, user.name)
+    target = User.first(:cell.not => user.cell, :offset => offset)
+    MESSAGES.sample.gsub(/<target>/, target.name)
   end
 end
