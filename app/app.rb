@@ -43,7 +43,7 @@ class Broliday < Padrino::Application
         
   #       # also need to send order to bartender
 
-  #       Rails.logger.debug Mechanize.new.post(MOGREET_URI, params).body
+  #       logger.info Mechanize.new.post(MOGREET_URI, params).body
   #       StreamItem.create(:message => "Someone just sent #{u.name} a #{order}!  Let's get weird!")
         
   #       200
@@ -58,7 +58,7 @@ class Broliday < Padrino::Application
   post '/message' do
     doc = XML::Parser.string(request.body.read).parse
 
-    Rails.logger.debug doc
+    logger.info doc
 
     campaign = doc.find("campaign_id").first.content
     number = doc.find("msisdn").first.content
@@ -74,7 +74,7 @@ class Broliday < Padrino::Application
       send_random(number) and return
     end
 
-    Rails.logger.debug "Creating message"
+    logger.info "Creating message"
 
     m = Message.create(
       :campaign_id => campaign,
@@ -101,7 +101,7 @@ class Broliday < Padrino::Application
   end
 
   def create_user(doc)
-    Rails.logger.debug "Creating new user"
+    logger.info "Creating new user"
 
     u=User.create(
       :cell => doc.find("msisdn").first.content,
@@ -116,13 +116,13 @@ class Broliday < Padrino::Application
       :message => "Thanks for partyin, bro. We'll send you alerts throughout the night with stuff to do. You can also text BR plus a pic or message to get it displayed on screen. #Sorryforparty"
     }
 
-    Rails.logger.debug params
+    logger.info params
 
     Mechanize.new.post(MOGREET_URI, params).body
   end
 
   def send_random(number)
-    Rails.logger.debug "Sending a random text"
+    logger.info "Sending a random text"
 
     offset = rand(User.count-1)
 
@@ -154,7 +154,7 @@ class Broliday < Padrino::Application
   end
 
   def random_message(user)
-    Rails.logger.debug "Sending random message"
+    logger.info "Sending random message"
     MESSAGES.sample.gsub(/<target>/, user.name)
   end
 end
