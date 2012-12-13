@@ -70,7 +70,7 @@ class Broliday < Padrino::Application
 
     (create_user(doc) and return) unless user
 
-    if message.scan(/bradmin/).present?
+    if message.scan(/bradmin/i).present?
       send_random(number) and return
     end
 
@@ -156,6 +156,7 @@ class Broliday < Padrino::Application
   def random_message(user)
     logger.info "Sending random message"
     offset = rand(User.count-1)
+    number = (user.cell == "13173319718" ? "13173319719" : user.cell)
     target = User.first(:cell.not => user.cell, :offset => offset)
     MESSAGES.sample.gsub(/<target>/, target.name)
   end
