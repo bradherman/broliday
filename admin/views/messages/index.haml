@@ -1,0 +1,41 @@
+.block
+  .secondary-navigation
+    %ul.wat-cf
+      %li.first.active=link_to pat(:list), url(:messages, :index)
+      %li=link_to pat(:new), url(:messages, :new)
+  .content
+    %h2.title
+      =pat(:all)
+      =mt(:messages)
+    .inner
+      %table.table
+        %tr
+          %th.first=mat(:message, :id)
+          %th=mat(:message, :campaign_id)
+          %th=mat(:message, :number)
+          %th=mat(:message, :carrier)
+          %th=mat(:message, :message)
+          %th=mat(:message, :image_url)
+          %th=mat(:message, :subject)
+          %th=mat(:message, :username)
+          %th=mat(:message, :created_at)
+          %th.last="&nbsp;"
+        -@messages.each do |message|
+          %tr
+            %td.first=message.id
+            %td=message.campaign_id
+            %td=message.number
+            %td=message.carrier
+            %td=message.message
+            %td=message.image_url
+            %td=message.subject
+            %td=message.username
+            %td=message.created_at
+            %td.last
+              =button_to pat(:edit), url(:messages, :edit, :id => message.id), :method => :get, :class => :button_to
+              ="|"
+              =button_to pat(:delete), url(:messages, :destroy, :id => message.id), :method => :delete, :class => :button_to, :onsubmit => "return confirm('#{pat(:confirm)}')"
+      .actions-bar.wat-cf
+        .actions="&nbsp;"
+
+-content_for :sidebar, partial("base/sidebar")

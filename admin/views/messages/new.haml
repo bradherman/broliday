@@ -1,0 +1,14 @@
+.block
+  .secondary-navigation
+    %ul.wat-cf
+      %li.first=link_to pat(:list), url(:messages, :index)
+      %li.active=link_to pat(:new), url(:messages, :new)
+  .content
+    %h2.title
+      =pat(:new)
+      =mt(:message)
+    .inner
+      -form_for :message, url(:messages, :create), :class => :form do |f|
+        =partial "messages/form", :locals => { :f => f }
+
+-content_for :sidebar, partial("base/sidebar")
