@@ -22,4 +22,15 @@ class User
 		self.points += 1
 		self.save
 	end
+
+	def send_message(message)
+		params = {
+	        :client_id => MOGREET_CLIENT_ID, 
+	        :token => MOGREET_TOKEN, 
+	        :campaign_id => MOGREET_SMS_CAMPAIGN, 
+	        :to => self.cell, 
+	        :message => message
+	    }
+		Mechanize.new.post(MOGREET_URI, params).body
+	end
 end
