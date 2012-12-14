@@ -101,6 +101,11 @@ class Broliday < Padrino::Application
     redirect '/party-stream'
   end
 
+  get '/cycle' do
+    @images = Message.all(:image_url.not => nil).map{|x| x.image_url}
+    erb :cycle
+  end
+
   #### METHODS ####
 
   def create_user(doc)

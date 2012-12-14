@@ -1,0 +1,30 @@
+<div class="grid" id="stream">
+	<center>
+		<div class="slideshow">
+			<% @images.each do |src| %>
+				<img src="<%=src%>">
+			<% end %>
+		</div>
+	</center>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.slideshow').cycle({
+		fx: 'fade' // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+	});
+});
+</script>
+<style type="text/css">
+	body {
+		background-image: url(/images/stream_background.jpg);
+		padding-top: 0;
+	}
+	.navbar {
+		display: none;
+	}
+	#new {display:none;}
+	.show-grid [class*="span"], .show-grid [class*="span"]:hover {
+		background-color:rgba(255,255,255,0.8);
+	}
+</style>
