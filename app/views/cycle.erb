@@ -2,7 +2,9 @@
 	<center>
 		<div class="slideshow">
 			<% @images.each do |src| %>
-				<img src="<%=src%>">
+				<% if img != "" %>
+					<img src="<%=src%>"/>
+				<% end %>
 			<% end %>
 		</div>
 	</center>
