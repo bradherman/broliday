@@ -96,6 +96,7 @@ class Broliday < Padrino::Application
     }
 
     send_message(params)
+    true
   end
 
   def send_random(from)
