@@ -99,32 +99,36 @@ class Broliday < Padrino::Application
   end
 
   def send_random(from)
-    offset = rand(User.count-1)
-    to = User.first(:cell.not => from.to_s, :offset => offset)
+      offsets = (0..rand(User.count-1)).to_a.sort{ rand() - 0.5 }[0..5]
+      recipients = []
 
-    if to
-      message = random_message(to)
+      offsets.each do |offset|
+        recipients << User.first(:cell.not => from.to_s, :offset => offset)
+      end
+      
+      recipients.each do |to|
+        message = random_message(to.cell)
 
-      params = {
-        :client_id => MOGREET_CLIENT_ID, 
-        :token => MOGREET_TOKEN, 
-        :campaign_id => MOGREET_SMS_CAMPAIGN, 
-        :to => to.cell, 
-        :message => message
-      }
+        params = {
+          :client_id => MOGREET_CLIENT_ID, 
+          :token => MOGREET_TOKEN, 
+          :campaign_id => MOGREET_SMS_CAMPAIGN, 
+          :to => to.cell, 
+          :message => message
+        }
 
-      send_message(params)
+        send_message(params)
+      end
 
       params = {
         :client_id => MOGREET_CLIENT_ID, 
         :token => MOGREET_TOKEN, 
         :campaign_id => MOGREET_SMS_CAMPAIGN, 
         :to => from, 
-        :message => "We just sent a random text to #{to.name}: #{to.cell}: #{message}"
+        :message => "Texts went to #{recipients.map{|x|x.name}*", "}"
       }
 
       send_message(params)
-    end
   end
 
   def random_message(to)
