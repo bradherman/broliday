@@ -65,12 +65,13 @@ class Broliday < Padrino::Application
 
   post '/upload/:code' do |code|
     code = Code.get(code)
-    upload("br/#{SecureRandom.uuid}/#{params[:file][:filename]}", params[:file][:tempfile], "eazyparts")
+    uuid = SecureRandom.uuid
+    upload("br/#{uuid}/#{params[:file][:filename]}", params[:file][:tempfile], "eazyparts")
 
     m = Message.create(
       :message => (params[:message] || code.message),
       :username => (code.name || "Web upload"),
-      :image_url => "http://eazyparts.s3.amazonaws.com/br/#{SecureRandom.uuid}/#{params[:file][:filename]}"
+      :image_url => "http://eazyparts.s3.amazonaws.com/br/#{uuid}/#{params[:file][:filename]}"
     )
 
     code.used = true
