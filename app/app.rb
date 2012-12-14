@@ -92,7 +92,7 @@ class Broliday < Padrino::Application
       :token => MOGREET_TOKEN, 
       :campaign_id => MOGREET_SMS_CAMPAIGN, 
       :to => u.cell, 
-      :message => "Thanks for partyin, bro. We'll send you alerts throughout the night with stuff to do. You can also text BR plus a pic or message to get it displayed on screen. #Sorryforparty"
+      :message => "Thanks for partying! We'll send you alerts throughout the night with stuff to do."
     }
 
     send_message(params)
