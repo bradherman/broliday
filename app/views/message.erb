@@ -1,0 +1,17 @@
+<div class="grid" id="upload">
+	<center>
+		<form class="form" method="post">
+		<fieldset>
+			<legend>Send A Quick Text to <%= @user.name %></legend>
+			<textarea rows="3" name="message"></textarea>
+			<input type="submit" class="btn">
+		</fieldset>
+	</form>
+	</center>
+</div>
+
+<script type="text/javascript">
+	$('.fileupload').fileupload({
+		uploadtype: 'image'
+	});
+</script>

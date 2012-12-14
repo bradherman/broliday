@@ -80,6 +80,27 @@ class Broliday < Padrino::Application
     redirect '/party-stream'
   end
 
+  get '/users/message/:id' do |id|
+    @user = User.get(id)
+    erb :message
+  end
+
+  post '/users/message/:id' do |id|
+    u = User.get(id)
+
+    pm = {
+        :client_id => MOGREET_CLIENT_ID, 
+        :token => MOGREET_TOKEN, 
+        :campaign_id => MOGREET_SMS_CAMPAIGN, 
+        :to => u.cell, 
+        :message => params[:message]
+      }
+
+    send_message(pm)
+
+    redirect '/party-stream'
+  end
+
   #### METHODS ####
 
   def create_user(doc)
