@@ -102,7 +102,7 @@ class Broliday < Padrino::Application
   end
 
   get '/cycle' do
-    @images = Message.all(:image_url.not => nil).map{|x| x.image_url}
+    @images = Message.all(:image_url.not => nil).map{|x| x.image_url}.shuffle
     erb :cycle
   end
 
